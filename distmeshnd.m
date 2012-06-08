@@ -18,7 +18,7 @@ function [p,t]=distmeshnd(fdist,fh,h,box,fix,varargin)
 %
 %   See also: DISTMESH2D, DELAUNAYN, TRIMESH, MESHDEMOND.
 
-%   Copyright (C) 2004-2006 Per-Olof Persson. See COPYRIGHT.TXT for details.
+%   Copyright (C) 2004-2012 Per-Olof Persson. See COPYRIGHT.TXT for details.
 
 dim=size(box,2);
 ptol=.001; ttol=.1; L0mult=1+.4/2^(dim-1); deltat=.1; geps=1e-1*h; deps=sqrt(eps)*h;

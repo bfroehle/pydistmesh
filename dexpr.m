@@ -1,6 +1,6 @@
 function d=dexpr(p,fin,nit,alpha)
 
-%   Copyright (C) 2004-2006 Per-Olof Persson. See COPYRIGHT.TXT for details.
+%   Copyright (C) 2004-2012 Per-Olof Persson. See COPYRIGHT.TXT for details.
 
 if nargin<3, nit=20; end
 if nargin<4, alpha=0.1; end

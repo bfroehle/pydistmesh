@@ -1,6 +1,6 @@
 function d=dpoly(p,pv)
 
-%   Copyright (C) 2004-2006 Per-Olof Persson. See COPYRIGHT.TXT for details.
+%   Copyright (C) 2004-2012 Per-Olof Persson. See COPYRIGHT.TXT for details.
 
 np=size(p,1);
 nvs=size(pv,1)-1;

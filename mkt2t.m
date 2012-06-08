@@ -2,15 +2,15 @@ function [t2t,t2n]=mkt2t(t)
 %MKT2T  Compute element connectivities from element indices.
 %   [T2T,T2N]=MKT2T(T)
 
-%   Copyright (C) 2004-2006 Per-Olof Persson. See COPYRIGHT.TXT for details.
+%   Copyright (C) 2004-2012 Per-Olof Persson. See COPYRIGHT.TXT for details.
 
 nt=size(t,1);
 dim=size(t,2)-1;
 
 switch dim
  case 1
-  edges=[t(:,1)
-         t(:,2)];
+  edges=[t(:,2)
+         t(:,1)];
  case 2
   edges=[t(:,[2,3])
          t(:,[3,1])

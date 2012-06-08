@@ -1,4 +1,4 @@
-// Copyright (C) 2004-2006 Per-Olof Persson. See COPYRIGHT.TXT for details.
+// Copyright (C) 2004-2012 Per-Olof Persson. See COPYRIGHT.TXT for details.
 
 #include "mex.h"
 #include <cmath>

@@ -2,7 +2,7 @@ function v=simpvol(p,t)
 %SIMPVOL Simplex volume.
 %   V=SIMPVOL(P,T)
 
-%   Copyright (C) 2004-2006 Per-Olof Persson. See COPYRIGHT.TXT for details.
+%   Copyright (C) 2004-2012 Per-Olof Persson. See COPYRIGHT.TXT for details.
 
 switch size(p,2)
  case 1

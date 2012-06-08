@@ -2,7 +2,7 @@ function tri=surftri(p,t)
 %SURFTRI Find surface triangles from tetrahedra mesh
 %   TRI=SURFTRI(P,T)
 
-%   Copyright (C) 2004-2006 Per-Olof Persson. See COPYRIGHT.TXT for details.
+%   Copyright (C) 2004-2012 Per-Olof Persson. See COPYRIGHT.TXT for details.
 
 % Form all faces, non-duplicates are surface triangles
 faces=[t(:,[1,2,3]);

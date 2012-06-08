@@ -1,9 +1,9 @@
 function meshdemond
 %MESHDEMOND distmeshnd examples.
 
-%   Copyright (C) 2004-2006 Per-Olof Persson. See COPYRIGHT.TXT for details.
+%   Copyright (C) 2004-2012 Per-Olof Persson. See COPYRIGHT.TXT for details.
 
-rand('state',111); % Always the same results
+rand('state',1); % Always the same results
 set(gcf,'rend','opengl');
 
 disp('(9) 3-D Unit ball')

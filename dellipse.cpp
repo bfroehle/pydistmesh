@@ -1,18 +1,20 @@
-// Copyright (C) 2004-2006 Per-Olof Persson. See COPYRIGHT.TXT for details.
+// Copyright (C) 2004-2012 Per-Olof Persson. See COPYRIGHT.TXT for details.
 
 #include "mex.h"
 #include <algorithm>
 #include <cmath>
+#include <cstring>
 
 using namespace std;
 template<class T> inline T sqr(T x) { return x*x; }
+typedef ptrdiff_t szint;
 
-void roots(double *pol,double *rr,double *ri,int n);
+void roots(double *pol,double *rr,double *ri,szint n);
 double dellipse(double x0,double y0,double a,double b);
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
-  int np=mxGetM(prhs[0]);
+  szint np=mxGetM(prhs[0]);
   double *p=mxGetPr(prhs[0]);
   double *axes=mxGetPr(prhs[1]);
   plhs[0]=mxCreateDoubleMatrix(np,1,mxREAL);
@@ -46,23 +48,27 @@ double dellipse(double x0,double y0,double a,double b)
   return d;
 }
 
-extern "C" { void dhseqr(char*,char*,int*,int*,int*,double*,int*,double*,
-                         double*,void*,int*,double*,void*,int*); }
+extern "C" { void dhseqr_(char*,char*,szint*,szint*,szint*,double*,szint*,double*,
+                         double*,void*,szint*,double*,void*,szint*); }
 
-void roots(double *pol,double *rr,double *ri,int n)
+void roots(double *pol,double *rr,double *ri,szint n)
 {
-  double H[n*n];
-  double work[n];
-  int o=1;
-  int info;
+  double *H,*work;
+  szint o=1;
+  szint info;
+  char chE='E',chN='N';
+  H=(double*)mxCalloc(n*n,sizeof(double));
+  work=(double*)mxCalloc(n,sizeof(double));
 
   memset(H,0,n*n*sizeof(double));
   for (int i=0; i<n-1; i++)
     H[1+(n+1)*i]=1.0;
   for (int i=0; i<n; i++)
     H[n*i]=-pol[i+1]/pol[0];
+  
+  dhseqr_(&chE,&chN,&n,&o,&n,H,&n,rr,ri,0,&n,work,&n,&info);
 
-  dhseqr("E","N",&n,&o,&n,H,&n,rr,ri,0,&n,work,&n,&info);
+  mxFree(work); mxFree(H);
   if (info!=0)
     mexErrMsgTxt("Roots not found.");
 }
