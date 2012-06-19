@@ -25,10 +25,10 @@ PyDistMesh is distributed under the `GNU GPL`_.
 
      >>> import distmesh as dm
      >>> fd = lambda p: dm.ddiff(dm.drectangle(p,-1,1,-1,1),
-                                 dm.dcircle(p,0,0,0.5))
+     ...                         dm.dcircle(p,0,0,0.5))
      >>> fh = lambda p: 0.05+0.3*dm.dcircle(p,0,0,0.5)
      >>> p, t = dm.distmesh2d(fd, fh, 0.05, (-1,-1,1,1),
-                              [(-1,-1),(-1,1),(1,-1),(1,1)])
+     ...                      [(-1,-1),(-1,1),(1,-1),(1,1)])
 
 
 3-D Examples
@@ -39,7 +39,7 @@ PyDistMesh is distributed under the `GNU GPL`_.
      >>> import distmesh as dm
      >>> import numpy as np
      >>> fd = lambda p: np.sqrt((p**2).sum(1))-1.0
-     >>> p, r = dm.distmeshnd(fd, dm.huniform, 0.2, (-1,-1,-1, 1,1,1))
+     >>> p, t = dm.distmeshnd(fd, dm.huniform, 0.2, (-1,-1,-1, 1,1,1))
 
 * Cylinder with hole::
 
