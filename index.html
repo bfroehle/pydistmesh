@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>PyDistMesh by bfroehle</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">PyDistMesh</h1>
+        <p class="header">A Simple Mesh Generator in Python</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/bfroehle/pydistmesh/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/bfroehle/pydistmesh/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/bfroehle">bfroehle</a></p>
+
+
+      </header>
+      <section>
+        <p>PyDistMesh is a simple Python code for generating unstructured
+triangular and tetrahedral meshes using <em>signed distance functions</em>. It
+intends to have the same functionality as and similar interface to the
+MATLAB-based <a href="http://persson.berkeley.edu/distmesh/">DistMesh</a>.
+Like DistMesh, upon which it is based, PyDistMesh is distributed under the <a href="http://www.gnu.org/copyleft/gpl.html">GNU GPL</a>.</p>
+
+<h2>2-D Examples</h2>
+
+<ul>
+<li>
+<p>Uniform Mesh on Unit Circle:</p>
+
+<pre><code>&gt;&gt;&gt; import distmesh as dm
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; fd = lambda p: np.sqrt((p**2).sum(1))-1.0
+&gt;&gt;&gt; p, t = dm.distmesh2d(fd, dm.huniform, 0.2, (-1,-1,1,1))
+</code></pre>
+</li>
+<li>
+<p>Rectangle with circular hole, refined at circle boundary:</p>
+
+<pre><code>&gt;&gt;&gt; import distmesh as dm
+&gt;&gt;&gt; fd = lambda p: dm.ddiff(dm.drectangle(p,-1,1,-1,1),
+...                         dm.dcircle(p,0,0,0.5))
+&gt;&gt;&gt; fh = lambda p: 0.05+0.3*dm.dcircle(p,0,0,0.5)
+&gt;&gt;&gt; p, t = dm.distmesh2d(fd, fh, 0.05, (-1,-1,1,1),
+...                      [(-1,-1),(-1,1),(1,-1),(1,1)])
+</code></pre>
+</li>
+</ul><h2>3-D Examples</h2>
+
+<ul>
+<li>
+<p>3-D Unit ball:</p>
+
+<pre><code>&gt;&gt;&gt; import distmesh as dm
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; fd = lambda p: np.sqrt((p**2).sum(1))-1.0
+&gt;&gt;&gt; p, t = dm.distmeshnd(fd, dm.huniform, 0.2, (-1,-1,-1, 1,1,1))
+</code></pre>
+</li>
+<li>
+<p>Cylinder with hole:</p>
+
+<pre><code>&gt;&gt;&gt; import distmesh as dm
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; def fd10(p):
+...     r, z = np.sqrt(p[:,0]**2 + p[:,1]**2), p[:,2]
+...     d1, d2, d3 = r-1.0, z-1.0, -z-1.0
+...     d4, d5 = np.sqrt(d1**2+d2**2), np.sqrt(d1**2+d3**2)
+...     d = dm.dintersect(dm.dintersect(d1, d2), d3)
+...     ix = (d1&gt;0)*(d2&gt;0); d[ix] = d4[ix]
+...     ix = (d1&gt;0)*(d3&gt;0); d[ix] = d5[ix]
+...     return dm.ddiff(d, dm.dsphere(p, 0,0,0, 0.5))
+&gt;&gt;&gt; def fh10(p):
+...     h1 = 4*np.sqrt((p**2).sum(1))-1.0
+...     return np.minimum(h1, 2.0)
+&gt;&gt;&gt; p, t = dm.distmeshnd(fd10, fh10, 0.1, (-1,-1,-1, 1,1,1))
+</code></pre>
+</li>
+</ul><h2>Demos</h2>
+
+<p>For a quick demonstration, run:</p>
+
+<pre><code>$ python -m distmesh.demo2d
+</code></pre>
+
+<p>or:</p>
+
+<pre><code>$ pythom -m distmesh.demond
+</code></pre>
+
+<h2>Dependencies</h2>
+
+<p>PyDistMesh is compatible with both Python 2 and Python 3. (The author
+has only tested it in Python 2.7 and Python 3.2). It requires several
+common Python packages:</p>
+
+<ul>
+<li><a href="http://numpy.scipy.org/">NumPy</a></li>
+<li><a href="http://scipy.org/">SciPy</a></li>
+<li>
+<a href="http://matplotlib.sourceforge.net/">matplotlib</a> (optional)</li>
+</ul><p>Building the package requires a C compiler and <a href="http://www.netlib.org/lapack/">LAPACK</a>.
+<a href="http://cython.org/">Cython</a>, if available, can be used to rebuild the extension module bindings.</p>
+
+<h2>References</h2>
+
+<p>The DistMesh algorithm is described in the following two references.
+If you use the algorithm in a program or publication, please
+acknowledge its authors by adding a reference to the first paper
+below.</p>
+
+<ul>
+<li><p>P.-O. Persson, G. Strang, <strong>A Simple Mesh Generator in MATLAB</strong>.
+<em>SIAM Review</em>, Volume 46 (2), pp. 329-345, June 2004 (<a href="http://persson.berkeley.edu/distmesh/persson04mesh.pdf">PDF</a>)</p></li>
+<li><p>P.-O. Persson, <strong>Mesh Generation for Implicit Geometries</strong>.
+Ph.D. thesis, <em>Department of Mathematics, MIT</em>, Dec 2004 (<a href="http://persson.berkeley.edu/thesis/persson-thesis-color.pdf">PDF</a>)</p></li>
+</ul>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+		
+  </body>
+</html>
