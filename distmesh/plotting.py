@@ -204,7 +204,7 @@ def simpplot(p, t, *args, **kwargs):
     try:
         dim = p.shape[1]
         if dim == 2:
-            ret = axes_simpplot2d(ax, p, t *args, **kwargs)
+            ret = axes_simpplot2d(ax, p, t, *args, **kwargs)
         elif dim == 3:
             import mpl_toolkits.mplot3d
             ax = plt.gca(projection='3d')
