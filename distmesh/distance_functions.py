@@ -57,7 +57,7 @@ def dblock(p,x1,x2,y1,y2,z1,z2):
 
 def dcircle(p,xc,yc,r):
     """Signed distance to circle centered at xc, yc with radius r."""
-    return np.sqrt((p[:,0]-xc)**2+(p[:,1]-yc)**2)-r
+    return np.sqrt(((p-np.array([xc,yc]))**2).sum(-1))-r
 
 def ddiff(d1,d2):
     """Signed distance to set difference between two regions described by
