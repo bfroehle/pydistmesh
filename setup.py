@@ -24,19 +24,14 @@ with open(os.path.join('distmesh', '__init__.py')) as f:
 exec(line, globals())
 
 # Build list of cython extensions
-try:
-    from Cython.Build import cythonize
-    ext_modules = cythonize([
-        os.path.join('distmesh', '_distance_functions.pyx'),
-        ])
-except ImportError:
-    from distutils.extension import Extension
-    ext_modules = [
-        Extension(
-            'distmesh._distance_functions',
-            [os.path.join('distmesh', '_distance_functions.c')],
-            ),
-        ]
+from distutils.extension import Extension
+ext_modules = [
+    Extension(
+        'distmesh._distance_functions',
+        sources=[os.path.join('distmesh', '_distance_functions.c')],
+        depends=[os.path.join('distmesh', 'src', 'distance_functions.c')],
+    ),
+]
 
 # distmesh._distance_functions needs LAPACK
 ext_modules[0].libraries.append('lapack')
