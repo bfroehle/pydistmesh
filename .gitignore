@@ -4,6 +4,7 @@
 # Packages
 *.egg
 *.egg-info
+MANIFEST
 dist
 build
 eggs
