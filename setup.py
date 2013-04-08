@@ -38,7 +38,7 @@ ext_modules[0].libraries.append('lapack')
 
 long_description = open('README.rst').read()
 
-setup(name='distmesh',
+setup(name='PyDistMesh',
       version=__version__,
       description="A Simple Mesh Generator in Python",
       long_description=long_description,
