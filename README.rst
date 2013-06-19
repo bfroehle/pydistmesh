@@ -67,7 +67,7 @@ For a quick demonstration, run::
 
 or::
 
-    $ pythom -m distmesh.demond
+    $ python -m distmesh.demond
 
 Dependencies
 ------------
