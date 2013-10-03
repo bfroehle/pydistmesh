@@ -15,8 +15,6 @@
 #-----------------------------------------------------------------------------
 
 import numpy as np
-import sympy as sp
-from sympy.utilities import lambdify
 
 __all__ = [
     # Distance functions:
@@ -86,6 +84,9 @@ def dexpr(p, fstr, nit=20, alpha=0.1):
     fstr is a string to be evaluated by sympy.sympify. It _must_ use
     x, y as variables in the string.
     """
+
+    import sympy as sp
+    from sympy.utilities import lambdify
 
     x, y = sp.symbols('x y')
     f = sp.sympify(fstr)
