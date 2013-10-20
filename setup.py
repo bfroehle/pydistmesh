@@ -13,6 +13,7 @@
 #-----------------------------------------------------------------------------
 
 import os
+import numpy as np
 
 from distutils.core import setup
 
@@ -30,6 +31,7 @@ ext_modules = [
         'distmesh._distance_functions',
         sources=[os.path.join('distmesh', '_distance_functions.c')],
         depends=[os.path.join('distmesh', 'src', 'distance_functions.c')],
+        include_dirs=[np.get_include()],
     ),
 ]
 
