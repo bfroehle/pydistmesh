@@ -101,8 +101,8 @@ def dpoly(p,pv):
     pv should be provided as a list of coordinates [(x0,y0), (x1,y1), ...]
     or an array of shape (nv, 2).
     """
-    from matplotlib.nxutils import points_inside_poly
-    return (-1)**points_inside_poly(p, pv) * dsegment(p, pv).min(1)
+    from matplotlib.path import Path
+    return (-1)**Path(pv).contains_points(p) * dsegment(p, pv).min(1)
 
 def drectangle0(p,x1,x2,y1,y2):
     """Signed distance function for rectangle with corners (x1,y1), (x2,y1),
