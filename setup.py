@@ -16,6 +16,8 @@ import os
 import numpy as np
 
 from distutils.core import setup
+from distutils.extension import Extension
+
 
 # Read version from distmesh/__init__.py
 with open(os.path.join('distmesh', '__init__.py')) as f:
@@ -24,8 +26,8 @@ with open(os.path.join('distmesh', '__init__.py')) as f:
         line = f.readline()
 exec(line, globals())
 
+
 # Build list of cython extensions
-from distutils.extension import Extension
 ext_modules = [
     Extension(
         'distmesh._distance_functions',
@@ -37,6 +39,10 @@ ext_modules = [
 
 # distmesh._distance_functions needs LAPACK
 ext_modules[0].libraries.append('lapack')
+
+install_requires = [
+    'matplotlib>=1.2',
+]
 
 long_description = open('README.rst').read()
 
@@ -54,6 +60,7 @@ setup(name='PyDistMesh',
       author='Bradley Froehle',
       author_email='brad.froehle@gmail.com',
       url='https://github.com/bfroehle/pydistmesh',
+      install_requires=install_requires,
       license='GPL',
       packages=['distmesh'],
       ext_modules=ext_modules,
