@@ -14,6 +14,7 @@
 
 import os
 import numpy as np
+from numpy.distutils import system_info
 
 from distutils.core import setup
 from distutils.extension import Extension
@@ -38,7 +39,16 @@ ext_modules = [
 ]
 
 # distmesh._distance_functions needs LAPACK
-ext_modules[0].libraries.append('lapack')
+lapack_info = system_info.get_info('lapack_opt', 0)
+# See ('https://github.com/nipy/nipy/blob/'
+#      '91fddffbae25a5ca3a5b35db2a7c605b8db9014d/nipy/labs/setup.py#L44')
+if 'libraries' not in lapack_info:
+    lapack_info = system_info.get_info('lapack', 0)
+
+ext_modules[0].libraries.extend(lapack_info['libraries'])
+ext_modules[0].library_dirs.extend(lapack_info['library_dirs'])
+if 'include_dirs' in lapack_info:
+    ext_modules[0].include_dirs.extend(lapack_info['include_dirs'])
 
 install_requires = [
     'matplotlib>=1.2',
