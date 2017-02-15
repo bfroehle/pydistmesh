@@ -30,7 +30,7 @@ __all__ = ['distmeshnd']
 # Functions
 #-----------------------------------------------------------------------------
 
-def distmeshnd(fd, fh, h0, bbox, pfix=None, fig='gcf'):
+def distmeshnd(fd, fh, h0, bbox, pfix=None, fig='gcf', iteration_max=1e3):
     """
     distmeshnd: N-D Mesh Generator using Distance Functions.
 
@@ -40,12 +40,13 @@ def distmeshnd(fd, fh, h0, bbox, pfix=None, fig='gcf'):
 
     Parameters
     ----------
-    fd:        Distance function d(x,y)
-    fh:        Scaled edge length function h(x,y)
-    h0:        Initial edge length
-    bbox:      Bounding box, (xmin, ymin, zmin, ..., xmax, ymax, zmax, ...)
-    pfix:      Fixed node positions, shape (nfix, dim)
-    fig:       Figure to use for plotting, or None to disable plotting.
+    fd:             Distance function d(x,y)
+    fh:             Scaled edge length function h(x,y)
+    h0:             Initial edge length
+    bbox:           Bounding box, (xmin, ymin, zmin, ..., xmax, ymax, zmax, ...)
+    pfix:           Fixed node positions, shape (nfix, dim)
+    fig:            Figure to use for plotting, or None to disable plotting.
+    iteration_max:  Maximum number of iterations (default=1e3)
 
     Returns
     -------
@@ -116,7 +117,11 @@ def distmeshnd(fd, fh, h0, bbox, pfix=None, fig='gcf'):
     count = 0
     pold = float('inf')                              # For first iteration
 
+    iteration_count = 0
     while True:
+        iteration_count += 1
+        if iteration_count > iteration_max:
+            break
 
         # 3. Retriangulation by the Delaunay algorithm
         dist = lambda p1, p2: np.sqrt(((p1-p2)**2).sum(1))
