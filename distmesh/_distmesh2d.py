@@ -29,7 +29,7 @@ __all__ = ['distmesh2d']
 # Functions
 #-----------------------------------------------------------------------------
 
-def distmesh2d(fd, fh, h0, bbox, pfix=None, fig='gcf'):
+def distmesh2d(fd, fh, h0, bbox, pfix=None, fig='gcf', iteration_max=1e3):
     """
     distmesh2d: 2-D Mesh Generator using Distance Functions.
 
@@ -39,12 +39,13 @@ def distmesh2d(fd, fh, h0, bbox, pfix=None, fig='gcf'):
 
     Parameters
     ----------
-    fd:        Distance function d(x,y)
-    fh:        Scaled edge length function h(x,y)
-    h0:        Initial edge length
-    bbox:      Bounding box, (xmin, ymin, xmax, ymax)
-    pfix:      Fixed node positions, shape (nfix, 2)
-    fig:       Figure to use for plotting, or None to disable plotting.
+    fd:             Distance function d(x,y)
+    fh:             Scaled edge length function h(x,y)
+    h0:             Initial edge length
+    bbox:           Bounding box, (xmin, ymin, xmax, ymax)
+    pfix:           Fixed node positions, shape (nfix, 2)
+    fig:            Figure to use for plotting, or None to disable plotting.
+    iteration_max:  Maximum number of iterations (default=1e3)
 
     Returns
     -------
@@ -152,6 +153,9 @@ def distmesh2d(fd, fh, h0, bbox, pfix=None, fig='gcf'):
 
     while True:
         count += 1
+
+        if count > iteration_max:
+            break
 
         # 3. Retriangulation by the Delaunay algorithm
         dist = lambda p1, p2: np.sqrt(((p1-p2)**2).sum(1))
