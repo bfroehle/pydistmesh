@@ -29,7 +29,7 @@ __all__ = ['distmesh2d']
 # Functions
 #-----------------------------------------------------------------------------
 
-def distmesh2d(fd, fh, h0, bbox, pfix=None, fig='gcf'):
+def distmesh2d(fd, fh, h0, bbox, pfix=None, fig='gcf', **kwargs):
     """
     distmesh2d: 2-D Mesh Generator using Distance Functions.
 
@@ -107,9 +107,13 @@ def distmesh2d(fd, fh, h0, bbox, pfix=None, fig='gcf'):
         import matplotlib.pyplot as plt
         fig = plt.gcf()
 
-    dptol=.001; ttol=.1; Fscale=1.2; deltat=.2; geps=.001*h0;
+    dptol = kwargs.pop('dptol', .001)
+    ttol = kwargs.pop('ttol', .1)
+    Fscale = kwargs.pop('Fscale', 1.2)
+    deltat = kwargs.pop('deltat', .2)
+    geps = kwargs.pop('geps', .001*h0)
+    densityctrlfreq = kwargs.pop('densityctrlfreq', 30)
     deps=np.sqrt(np.finfo(np.double).eps)*h0;
-    densityctrlfreq=30;
 
     # Extract bounding box
     xmin, ymin, xmax, ymax = bbox
