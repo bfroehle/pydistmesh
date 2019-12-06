@@ -23,7 +23,7 @@ __all__ = [
     'ddiff',
     'dellipse',
     'dellipsoid',
-#    'dexpr',
+    'dexpr',
     'dintersect',
     'dmatrix3d',
     'dmatrix',
@@ -72,7 +72,61 @@ from distmesh._distance_functions import dellipse
 
 from distmesh._distance_functions import dellipsoid
 
-# dexpr not implemented
+
+#-----------------------------------------------------------------------------
+# dexpr using sympy
+#-----------------------------------------------------------------------------
+
+
+def dexpr(p, fstr, nit=20, alpha=0.1):
+    """
+    Returns distance function based on zero level set of function fstr.
+    fstr is a string to be evaluated by sympy.sympify. It _must_ use
+    x, y as variables in the string.
+    """
+
+    import sympy as sp
+    from sympy.utilities import lambdify
+
+    x, y = sp.symbols('x y')
+    f = sp.sympify(fstr)
+    fx = sp.diff(f, x)
+    fy = sp.diff(f, y)
+    fxx = lambdify((x, y), sp.diff(fx, x))
+    fyy = lambdify((x, y), sp.diff(fy, y))
+    fxy = lambdify((x, y), sp.diff(fx, y))
+    f = lambdify((x, y), f)
+    fx = lambdify((x, y), fx)
+    fy = lambdify((x, y), fy)
+
+    x0 = p[:, 0]
+    y0 = p[:, 1]
+    x = x0
+    y = y0
+
+    for it in range(nit):
+        cf = f(x, y)
+        cfx = fx(x, y)
+        cfy = fy(x, y)
+        cfxx = fxx(x, y)
+        cfyy = fyy(x, y)
+        cfxy = fxy(x, y)
+
+        F1 = cf
+        F2 = (x - x0) * cfy - (y - y0) * cfx
+        J11 = cfx
+        J12 = cfy
+        J21 = cfy + (x - x0) * cfxy - (y - y0) * cfxx
+        J22 = -cfx - (y - y0) * cfxy + (x - x0) * cfyy
+
+        detJ = J11 * J22 - J12 * J21
+        detJ[detJ == 0] = np.inf
+
+        x = x - alpha * (J22 * F1 - J21 * F2) / detJ
+        y = y - alpha * (-J12 * F1 + J11 * F2) / detJ
+
+    return np.sqrt((x - x0) ** 2 + (y - y0) ** 2) * np.sign(f(x0, y0))
+
 
 def dintersect(d1,d2):
     """Signed distance to set intersection of two regions described by signed
