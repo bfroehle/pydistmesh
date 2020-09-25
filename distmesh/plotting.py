@@ -76,7 +76,6 @@ def axes_simpplot2d(ax, p, t, nodes=False, annotate='', **kwargs):
     """
     scalex = kwargs.pop('scalex', True)
     scaley = kwargs.pop('scaley', True)
-    if not ax._hold: ax.cla()
 
     assert p.shape[1] == 2
 
@@ -105,10 +104,7 @@ def _mkfaces(t):
     return set(tuple(sorted(f)) for f in dmutils.boundedgesnd(t))
 
 def _trimesh(ax, t, x, y, z, **kwargs):
-    """Display a 3D triangular mesh.
-
-    Ignores ax._hold.
-    """
+    """Display a 3D triangular mesh."""
     from mpl_toolkits.mplot3d.art3d import pathpatch_2d_to_3d
     patches = []
     code = [Path.MOVETO, Path.LINETO, Path.LINETO, Path.CLOSEPOLY]
@@ -135,7 +131,6 @@ def axes_simpplot3d(ax, p, t, pmask=None, **kwargs):
     facecolor : facecolor
     ifacecolor : facecolor for faces exposed by pmask
     """
-    if not ax._hold: ax.cla()
     had_data = ax.has_data()
 
     facecolor = kwargs.pop('facecolor', (0.8, 0.9, 1.0))
@@ -196,11 +191,6 @@ def simpplot(p, t, *args, **kwargs):
     pmask : callable or bool array of shape (np,)
     """
     ax = plt.gca()
-    # allow callers to override the hold state by passing hold=True|False
-    washold = ax.ishold()
-    hold = kwargs.pop('hold', None)
-    if hold is not None:
-        ax.hold(hold)
     try:
         dim = p.shape[1]
         if dim == 2:
@@ -213,5 +203,5 @@ def simpplot(p, t, *args, **kwargs):
             raise NotImplementedError("Unknown dimension.")
         plt.draw_if_interactive()
     finally:
-        ax.hold(washold)
+        pass
     return ret
